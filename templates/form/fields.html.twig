@@ -1,0 +1,19 @@
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+            {{ form_label(form) }}
+            {{ form_errors(form, {'attr': {'class': 'text-warning'} }) }}
+            {{ form_widget(form, {'attr': {'class': 'form-control'} }) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+{% block app_datetimepicker_widget %}
+    {% spaceless %}
+        <div class="input-group date" data-toggle="datetimepicker">
+            {{ block('datetime_widget') }}
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
+    {% endspaceless %}
+{% endblock %}

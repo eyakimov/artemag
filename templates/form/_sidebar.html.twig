@@ -1,0 +1,56 @@
+<div class="section">
+    <div class="slide_header btn btn-primary">
+        <i class="fa fa-plus"></i>{{ 'title.new_company'|trans }}</div>
+    <div class="slide_content">
+        <div class="section actions">
+            <h1>{{ 'title.new_company'|trans }}</h1>
+            {{ include('form/_form.html.twig', {
+            form: newCompany_form,
+            button_label: 'action.new_company'|trans,
+            button_css: 'btn btn-lg btn-block btn-success',
+        }, with_context = false) }}
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="slide_header btn btn-primary">
+        <i class="fa fa-plus"></i>{{ 'title.new_country'|trans }}</div>
+    <div class="slide_content">
+        <div class="section actions">
+            <h1>{{ 'title.new_country'|trans }}</h1>
+            {{ include('form/_form.html.twig', {
+            form: newCountry_form,
+            button_label: 'action.new_country'|trans,
+            button_css: 'btn btn-lg btn-block btn-success',
+        }, with_context = false) }}
+        </div>
+    </div>
+</div>
+{#<div class="section">
+    <div class="slide_header btn btn-primary">
+        <i class="fa fa-plus"></i>{{ 'title.new_plaint'|trans }}</div>
+    <div class="slide_content">
+        <div class="section actions">
+            <h1>{{ 'title.new_plaint'|trans }}</h1>
+            {{ include('form/_form.html.twig', {
+            form: newPlaint_form,
+            button_label: 'action.new_plaint'|trans,
+            button_css: 'btn btn-lg btn-block btn-success',
+        }, with_context = false) }}
+        </div>
+    </div>
+</div>#}
+<div class="section">
+    <div class="slide_header btn btn-primary">
+        <i class="fa fa-plus"></i>{{ 'title.new_product'|trans }}</div>
+    <div class="slide_content">
+        <div class="section actions">
+            <h1>{{ 'title.new_product'|trans }}</h1>
+            {{ include('form/_form.html.twig', {
+            form: newProduct_form,
+            button_label: 'action.new_product'|trans,
+            button_css: 'btn btn-lg btn-block btn-success',
+        }, with_context = false) }}
+        </div>
+    </div>
+</div>

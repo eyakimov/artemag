@@ -1,0 +1,24 @@
+{% extends 'admin/index.html.twig' %}
+{% form_theme form 'form/fields.html.twig' %}
+{% block body_id 'admin_product_new' %}
+    {% block main %}
+        <h1>{{ 'title.new_product'|trans }}</h1>
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.amount) }}
+        {{ form_row(form.categories) }}
+        <button type="submit">Save!</button>
+        {{ form_end(form) }}
+
+    {% endblock %}
+    {% block sidebar %}
+        <div class="section">
+            <a href="{{ path('admin_product_index') }}" class="btn btn-lg btn-block btn-default">
+                <i class="fa fa-reply"></i>{{ 'action.back_to_list'|trans }}
+            </a>
+        </div>
+
+
+    {% endblock %}

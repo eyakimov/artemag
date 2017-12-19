@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'register' %}
+
+    {% block bodymain %}
+        <center>
+            <div style="width: 350px;float: none">
+                <div class="jumbotron">
+                    {{ form_start(form) }}
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.lastName) }}
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.plainPassword.first) }}
+                    {{ form_row(form.plainPassword.second) }}
+                    {{ form_row(form.termsAccepted) }}
+                    <button type="submit">Register!</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </center>
+{% endblock %}
+
+
+

@@ -1,0 +1,43 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block body_id 'admin_category_show' %}
+
+{% block main %}
+<h1>{{ 'Categories'|trans }}</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>{{ 'Name'|trans }}</th>
+            <th>{{ 'Description'|trans }}</th>
+            <th>{{ 'Parent category'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description }}</td>
+            <td>
+                {%if category.parent is not null %}
+                {{ category.parent.name }}
+                {% endif %}
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+        
+{% endblock %}
+
+{% block sidebar %}
+    <div class="section">
+        <a href="{{ path('admin_category_edit', { id: category.id }) }}" class="btn btn-lg btn-block btn-success">
+            <i class="fa fa-edit"></i> {{ 'action.edit_contents'|trans }}
+        </a>
+    </div>
+<div class="section">
+    <a href="{{ path('admin_category_index') }}" class="btn btn-lg btn-block btn-default">
+        <i class="fa fa-reply"></i>{{ 'action.back_to_list'|trans }}
+    </a>
+</div>
+
+{% endblock %}

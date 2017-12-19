@@ -1,0 +1,19 @@
+composer create-project symfony/skeleton artemag
+
+- composer require server
+- composer require doctrine/doctrine-bundle
+- composer require doctrine/orm
+- composer require doctrine/data-fixtures
+- composer require symfony/form
+- composer require symfony/validator
+- composer require doctrine maker
+- composer require symfony/security
+- composer require security
+- composer require mailer
+- composer require form
+- composer require symfony/finder
+- composer require twig
+- composer require symfony/templating
+- composer require symfony/asset
+- composer require annotations
+- composer require knplabs/knp-paginator-bundle
