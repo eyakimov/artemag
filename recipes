@@ -17,3 +17,4 @@ composer create-project symfony/skeleton artemag
 - composer require symfony/asset
 - composer require annotations
 - composer require knplabs/knp-paginator-bundle
+- composer require knplabs/knp-menu-bundle

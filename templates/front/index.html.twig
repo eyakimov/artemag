@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'front_index' %}
+
+    {% block header %}
+        <div class="nav navbar-default">
+            <div class="navbar-header">
+
+                <a class="navbar-brand" href="{{ path('front_index') }}">
+                    <i class="fa fa-home"></i> {{ 'menu.homepage'|trans }}
+                </a>
+                <a class="navbar-brand" href="{{ path('user_registration') }}" target="_parent">Register</a> 
+                <a class="navbar-brand" href="{{ path('security_login_form') }}" target="_parent">Login</a>
+                {{ knp_menu_render('main') }}
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    {% if app.user %}
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>{{ app.user.firstName}} {{app.user.lastName }}<i class="caret"></i></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ path('user_profile') }}">
+                                        <i class="fa fa-user-secret"></i> {{ 'menu.profile'|trans }}
+                                </li>
+                                <li>
+                                    <a href="{{ path('change_password') }}">
+                                        <i class="fa fa-lock"></i> {{ 'menu.change_password'|trans }}
+                                </li>
+                                <li>
+                                    <a href="{{ path('security_logout') }}">
+                                        <i class="fa fa-sign-out"></i> {{ 'menu.logout'|trans }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-globe"></i> <span class="caret"></span></a>
+                            <ul class="dropdown-menu locales" role="menu">
+                                {#{% for locale in locales() %}
+                                    <li {% if app.request.locale == locale.code %}class="active"{% endif %}><a href="{{ path(app.request.get('_route', 'admin_index'), app.request.get('_route_params', [])|merge({ _locale: locale.code })) }}">{{ locale.name|capitalize }}</a></li>
+                                    {% endfor %}#}
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        {% block header_navigation_link %}
+            {% if app.user and is_granted('ROLE_ADMIN') %}
+                <ul class="nav navbar-nav navbar-left">
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-edit"></i>{{ 'menu.new'|trans }}<i class="caret"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ path('admin_product_new') }}">
+                                    <i class="fa fa-edit"></i> {{ 'menu.product'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i>{{ 'menu.lists'|trans }}<i class="caret"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ path('admin_product_index') }}">
+                                    <i class="fa fa-list"></i> {{ 'list.products'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                {% endif %}
+
+                {% if app.user and is_granted('ROLE_SUPER_ADMIN') %}
+                    <li>
+                        <a href="{{ path('admin_user_index') }}">
+                            <i class="fa fa-users"></i> {{ 'menu.users'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+
+            {% endblock %} 
+        </ul>
+
+    {% endblock %}
+    {% block main %}
+
+        {{ include('default/_flash_messages.html.twig') }}
+
+    {% endblock %}
+
