@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller {
 
@@ -19,13 +19,33 @@ class DefaultController extends Controller {
      */
     public function index($page) {
         $em = $this->getDoctrine()->getManager();
-        $query = $em->getRepository(Product::class)->findGreaterByAmount(1,0);
+        $query = $em->getRepository(Product::class)->findGreaterByAmount(0);
 
         $paginator = $this->get('knp_paginator');
         $products = $paginator->paginate($query, $page, Product::NUM_ITEMS);
         $products->setUsedRoute('front_product_index_paginated');
 
         return $this->render('front/product/index.html.twig', array('products' => $products));
+    }
+    
+     /**
+     * Lists all Product entities by category.
+     *
+     * @Route("/products/{category}", name="front_index_by_category", defaults={"page" = 1})
+     * @Route("/products/{category}/{page}", name="front_product_by_category_index_paginated", requirements={"page" : "\d+"})
+     * @Method("GET")
+     */
+    public function indexByCategory($category,$page) {
+        $em = $this->getDoctrine()->getManager();
+        $cat=$em->getRepository(Category::class)->findOneBy(array('name'=>$category));
+        $categoryId=$cat->getId();
+        $query = $em->getRepository(Product::class)->findByCategory($categoryId);
+
+        $paginator = $this->get('knp_paginator');
+        $products = $paginator->paginate($query, $page, Product::NUM_ITEMS);
+        $products->setUsedRoute('front_product_by_category_index_paginated');
+
+        return $this->render('front/product/indexByCategory.html.twig', array('products' => $products));
     }
     
      /**

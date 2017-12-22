@@ -29,7 +29,9 @@ class MenuBuilder implements ContainerAwareInterface {
 
         $cats = $this->em->getRepository(Category::class)->findAll();
         foreach ($cats as $cat){
-            $menu->addChild($cat->getName(), array('route' => ""));
+            $menu->addChild($cat->getName(), 
+                    array('route' => "front_index_by_category", 
+                        'routeParameters' => array('category' => $cat->getName())));
         }
 
         return $menu;
