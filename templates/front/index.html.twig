@@ -14,6 +14,9 @@
                     <a class="navbar-brand" href="{{ path('security_login') }}" target="_parent">Login</a>
                 {% endif %}
                 <a class="navbar-brand" href="{{ path('user_cart') }}" target="_parent">Cart</a>
+                {% if app.user and is_granted('ROLE_EDITOR') %}
+                <a class="navbar-brand" href="{{ path('admin_show') }}" target="_parent">Admin Panel</a>
+                {% endif %}
             </div>
             
             <div class="navbar-collapse collapse">

@@ -51,9 +51,10 @@ security:
         # additional security lives in the controllers
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user, roles: ROLE_USER }
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/admin/users, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/admin, roles: ROLE_EDITOR }
+        - { path: ^/superadmin, roles: ROLE_SUPER_ADMIN }
         
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_EDITOR:       ROLE_USER
+        ROLE_ADMIN:        ROLE_EDITOR
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]       

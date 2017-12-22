@@ -22,6 +22,17 @@ class RegistrationController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $group = $em->getRepository(Group::class)->findOneBy(array('name' => 'user'));
         $form = $this->createForm(UserType::class, $user);
+        $form
+            ->add('plainPassword', RepeatedType::class, array(
+                'type' => PasswordType::class,
+                'first_options' => array('label' => 'Password'),
+                'second_options' => array('label' => 'Repeat Password'),
+                ))
+            ->add('termsAccepted', CheckboxType::class, array(
+                'mapped' => false,
+                'constraints' => new IsTrue(),
+                ))
+            ;
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);

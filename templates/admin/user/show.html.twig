@@ -1,0 +1,49 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block body_id 'admin_user_show' %}
+
+    {% block main %}
+        <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>{{ 'username'|trans }}</th>
+                    <td>{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'Group'|trans }}</th>
+                    <td>{{ user.group.name }}</td>
+                </tr>
+                    <th>{{ 'Email'|trans }}</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'Registered at'|trans }}</th>
+                    <td>{{ user.registeredAt|date('d-m-Y') }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'Last visited'|trans }}</th>
+                    <td>{{ user.lastVisited|date('d-m-Y') }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'Is enabled'|trans }}</th>
+                    <td><input type="checkbox" {% if user.isEnabled == true %} checked="checked"{% endif %} disabled="true"/></td>
+                </tr>
+            </tbody>
+        </table>
+
+    {% endblock %}
+
+    {% block sidebar %}
+        <div class="section">
+            <a href="{{ path('admin_user_edit', { id: user.id }) }}" class="btn btn-lg btn-block btn-success">
+                <i class="fa fa-edit"></i> {{ 'action.edit_contents'|trans }}
+            </a>
+        </div>
+        <div class="section">
+            <a href="{{ path('admin_user_index') }}" class="btn btn-lg btn-block btn-default">
+                <i class="fa fa-reply"></i>{{ 'action.back_to_list'|trans }}
+            </a>
+        </div>
+
+    {% endblock %}

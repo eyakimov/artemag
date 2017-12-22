@@ -1,0 +1,27 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block body_id 'admin_user_new' %}
+
+    {% block main %}
+        <h1>{{ 'title.newUser'|trans }}</h1>
+
+        {{ form_start(form) }}
+        {{ form_row(form.firstName) }}
+        {{ form_row(form.lastName) }}
+        {{ form_row(form.username) }}
+        {{ form_row(form.group) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+        {{ form_row(form.isEnabled) }}
+        {{ form_end(form) }}
+    {% endblock %}
+    {% block sidebar %}
+        <div class="section">
+            <a href="{{ path('admin_user_index') }}" class="btn btn-lg btn-block btn-default">
+                <i class="fa fa-reply"></i>{{ 'action.back_to_list'|trans }}
+            </a>
+        </div>
+
+
+    {% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block body_id 'admin_user_index' %}
+
+{% block main %}
+    
+<h1>{{ 'title.user_list'|trans }}</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ 'First name'|trans }}</th>
+            <th>{{ 'Last name'|trans }}</th>
+            <th>{{ 'Username'|trans }}</th>
+            <th>{{ 'Group'|trans }}</th>
+            <th><i class="fa fa-cogs"></i> {{ 'action'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.group.name }}</td>
+            <td>
+                <div class="item-actions">
+                    <a href="{{ path('admin_user_show', { id: user.id }) }}" class="btn btn-sm btn-default">
+                            {{ 'action.show'|trans }}
+                    </a>
+
+                    <a href="{{ path('admin_user_edit', { id: user.id }) }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-edit"></i> {{ 'action.edit'|trans }}
+                    </a>
+
+                </div>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" align="center">{{ 'user.no_user_found'|trans }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="navigation text-center">
+        {{ knp_pagination_render(users) }}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="section actions">
+    <a href="{{ path('admin_user_new') }}" class="btn btn-lg btn-block btn-success">
+        <i class="fa fa-plus"></i> {{ 'action.create_user'|trans }}
+    </a>
+</div>
+
+{% endblock %}

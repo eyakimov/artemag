@@ -15,6 +15,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class User implements AdvancedUserInterface, \Serializable{
 
+    const NUM_ITEMS = 10;
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -229,6 +231,9 @@ class User implements AdvancedUserInterface, \Serializable{
         }
         if($this->getGroup()->getName()=='admin'){
             $roles[] = 'ROLE_ADMIN';
+        }
+        if($this->getGroup()->getName()=='editor'){
+            $roles[] = 'ROLE_EDITOR';
         }
         if($this->getGroup()->getName()=='superadmin'){
             $roles[] = 'ROLE_SUPER_ADMIN';
