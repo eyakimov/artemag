@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  */
-class User implements AdvancedUserInterface{
+class User implements AdvancedUserInterface, \Serializable{
 
     /**
      * @ORM\Id
@@ -81,15 +81,15 @@ class User implements AdvancedUserInterface{
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="MyGroup", inversedBy="myuser")
-     * @ORM\JoinColumn(name="groupId", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Group", inversedBy="users")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
-    private $mygroups;
+    private $group;
 
     /**
      * roles for users
      */
-    private $roles = array();
+    private $roles;
 
     /**
      *
@@ -98,7 +98,12 @@ class User implements AdvancedUserInterface{
      */
     private $cash;
     
-    public function __construct() {
+    /**
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="user")
+     */
+    private $users;
+
+        public function __construct() {
 
         $this->registeredAt = null;
         $this->lastVisited = null;
@@ -134,11 +139,11 @@ class User implements AdvancedUserInterface{
         return $this->email;
     }
 
-    public function getRegisteredAt(): ?\DateTime {
+    public function getRegisteredAt(): \DateTime {
         return $this->registeredAt;
     }
 
-    public function getLastVisited(): ?\DateTime {
+    public function getLastVisited(): \DateTime {
         return $this->lastVisited;
     }
 
@@ -157,54 +162,59 @@ class User implements AdvancedUserInterface{
 
     public function setUsername($username) {
         $this->username = $username;
-        return $this;
     }
 
     public function setFirstName($firstName) {
         $this->firstName = $firstName;
-        return $this;
     }
 
     public function setLastName($lastName) {
         $this->lastName = $lastName;
-        return $this;
     }
 
     public function setPlainPassword($plainPassword) {
         $this->plainPassword = $plainPassword;
-        return $this;
     }
 
     public function setPassword($password) {
         $this->password = $password;
-        return $this;
     }
 
     public function setEmail($email) {
         $this->email = $email;
-        return $this;
     }
 
     public function setRegisteredAt(\DateTime $registeredAt) {
         $this->registeredAt = $registeredAt;
-        return $this;
     }
 
     public function setLastVisited(\DateTime $lastVisited) {
         $this->lastVisited = $lastVisited;
-        return $this;
     }
 
     public function setIsEnabled($isEnabled) {
         $this->isEnabled = $isEnabled;
-        return $this;
     }
 
     public function setCash(decimal $cash) {
         $this->cash = $cash;
-        return $this;
     }
 
+    public function getGroup(): Group {
+        return $this->group;
+    }
+
+    public function setGroup($group) {
+        $this->group = $group;
+    }
+    
+    public function getUsers() {
+        return $this->users;
+    }
+
+    public function setUsers($users) {
+        $this->users = $users;
+    }
     
     public function eraseCredentials() {
         
@@ -214,44 +224,21 @@ class User implements AdvancedUserInterface{
      * Returns the roles or permissions granted to the user for security.
      */
     public function getRoles() {
-
-        if ($this->mygroups->getMyrole() == 'admins') {
-            $roles[] = 'ROLE_ADMIN';
-        } elseif ($this->mygroups->getMyrole() == 'superadmins') {
-            $roles[] = 'ROLE_SUPER_ADMIN';
-        }
-
-        // guarantees that a user always has at least one role for security
-        if (empty($roles)) {
+        if($this->getGroup()->getName()=='user'){
             $roles[] = 'ROLE_USER';
         }
-
+        if($this->getGroup()->getName()=='admin'){
+            $roles[] = 'ROLE_ADMIN';
+        }
+        if($this->getGroup()->getName()=='superadmin'){
+            $roles[] = 'ROLE_SUPER_ADMIN';
+        }
+        $roles[] = 'ROLE_ANONYMOUS';
         return array_unique($roles);
     }
 
     public function setRoles(array $roles) {
         $this->roles = $roles;
-    }
-
-        /**
-     * Set mygroups
-     *
-     * @param \AppBundle\Entity\Group $mygroups
-     * @return User
-     */
-    public function setMygroups(App\Entity\MyGroup $mygroups = null) {
-        $this->mygroups = $mygroups;
-
-        return $this;
-    }
-
-    /**
-     * Get mygroups
-     *
-     * @return App\Entity\Group 
-     */
-    public function getMygroups() {
-        return $this->mygroups;
     }
     
     public function getSalt() {
@@ -259,22 +246,43 @@ class User implements AdvancedUserInterface{
     }
 
     public function isAccountNonExpired(): bool {
-        
+        return true;
     }
 
     public function isAccountNonLocked(): bool {
-        
+        return true;
     }
 
     public function isCredentialsNonExpired(): bool {
-        
+        return true;
     }
 
     public function isEnabled(): bool {
-        if(1===$this->isEnabled){
+        if(1==$this->isEnabled){
         return true;
         }
         return false;
     }
+    
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->isEnabled,
+        ));
+    }
 
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->isEnabled,
+        ) = unserialize($serialized);
+    }
 }

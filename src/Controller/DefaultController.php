@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller {
 
@@ -19,7 +19,7 @@ class DefaultController extends Controller {
      */
     public function index($page) {
         $em = $this->getDoctrine()->getManager();
-        $query = $em->getRepository(Product::class)->findAll();
+        $query = $em->getRepository(Product::class)->findGreaterByAmount(1,0);
 
         $paginator = $this->get('knp_paginator');
         $products = $paginator->paginate($query, $page, Product::NUM_ITEMS);

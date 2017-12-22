@@ -1,0 +1,25 @@
+{% extends 'admin/index.html.twig' %}
+{% form_theme up_form 'form/fields.html.twig' %}
+{% block body_id 'user_profile' %}
+        
+    {% block main %}
+        <h1>{{ 'title.user_profile'|trans }}</h1>
+
+        {{ include('form/_form.html.twig', {
+        form: up_form,
+        button_label: 'action.save'|trans,
+        include_back_to_home_link: true,
+    }, with_context = false) }}
+
+    {% endblock %}
+
+    {% block sidebar %}
+
+
+        <div class="section">
+            <a href="{{ path('change_password') }}" class="btn btn-lg btn-block btn-warning">
+                <i class="fa fa-reply"></i>{{ 'action.change_password'|trans }}
+            </a>
+        </div>
+    {% endblock %}
+

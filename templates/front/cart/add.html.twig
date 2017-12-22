@@ -1,0 +1,20 @@
+{% extends 'front/index.html.twig' %}
+{% form_theme form 'form/fields.html.twig' %}
+{% block body_id 'cart_add' %}
+    {% block main %}
+        <h1>{{ 'title.cart_add'|trans }}</h1>
+        {{ form_start(form) }}
+        {{ form_row(form.product) }}
+        {{ form_row(form.quantity) }}
+        <button type="submit">Buy Now!</button>
+        {{ form_end(form) }}
+
+    {% endblock %}
+    {% block sidebar %}
+        <div class="section">
+            <a href="{{ path('front_index') }}" class="btn btn-lg btn-block btn-default">
+                <i class="fa fa-reply"></i>{{ 'action.back_to_list'|trans }}
+            </a>
+        </div>
+    {% endblock %}
+

@@ -1,14 +1,21 @@
 security:
-    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
-    providers:
-        in_memory: { memory: ~ }
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            anonymous: ~
+    encoders:
+        # Our user class and the algorithm we'll use to encode passwords
+        # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
+        App\Entity\User: bcrypt
 
+    providers:
+
+        # in this example, users are stored via Doctrine in the database
+        # To see the users at src/AppBundle/DataFixtures/ORM/LoadFixtures.php
+        # To load users from somewhere else: http://symfony.com/doc/current/cookbook/security/custom_provider.html
+        database_users:
+            entity:
+                class: App:User
+                property: username
+
+    # http://symfony.com/doc/current/book/security.html#firewalls-authentication
+    firewalls:
         secured_area:
             # this firewall applies to all URLs
             pattern: ^/
@@ -17,50 +24,36 @@ security:
             # denying access is done in access_control or in your controllers
             anonymous: true
 
+            provider: database_users
             # This allows the user to login by submitting a username and password
             # Reference: http://symfony.com/doc/current/cookbook/security/form_login_setup.html
             form_login:
                 # The route name that the login form submits to
-                check_path: security_login_check
+                check_path: security_login
                 # The name of the route where the login form lives
                 # When the user tries to access a protected page, they are redirected here
-                login_path: security_login_form
+                login_path: security_login
                 # Secure the login form against CSRF
                 # Reference: http://symfony.com/doc/current/cookbook/security/csrf_in_login_form.html
-                csrf_token_generator: security.csrf.token_manager
-                csrf_parameter: _csrf_security_token
-                csrf_token_id: a_private_string
+#                csrf_token_generator: security.csrf.token_manager
+#                csrf_parameter: _csrf_secure_token
+#                csrf_token_id: a_private_string
 
             logout:
                 # The route name the user can go to in order to logout
                 path: security_logout
                 # The name of the route to redirect to after logging out
-                target: homepage
+                target: front_index
             security: true
 
     access_control:
         # this is a catch-all for the admin area
         # additional security lives in the controllers
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user, roles: ROLE_USER }
-        #- { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/admin/users, roles: ROLE_SUPER_ADMIN }
         
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_SUPER_ADMIN, ROLE_ALLOWED_TO_SWITCH]                 
-
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # https://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # https://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
-    encoders:
-        App\Entity\User: bcrypt
-#    encoders:
-#        Symfony\Component\Security\Core\User\User:
-#            algorithm: 'argon2i'
-#            algorithm: 'bcrypt'
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]       

@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Form\UserType;
+use App\Form\ChangePasswordType;
+use App\Form\Model\ChangePassword;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Form\Model\ChangePassword;
-use AppBundle\Form\ChangePasswordType;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Controller used to manage the application security.
@@ -17,31 +19,33 @@ use AppBundle\Form\ChangePasswordType;
 class SecurityController extends Controller {
 
     /**
-     * @Route("/login", name="security_login_form")
+     * @Route("/login", name="security_login")
      */
-    public function loginAction() {
-        $helper = $this->get('security.authentication_utils');
+    public function loginAction(Request $request, AuthenticationUtils $authUtils) {
+        // get the login error if there is one
+        $error = $authUtils->getLastAuthenticationError();
+        
+        // last username entered by the user
+        $lastUsername = $authUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', array(
-                    // last username entered by the user (if any)
-                    'last_username' => $helper->getLastUsername(),
-                    // last authentication error (if any)
-                    'error' => $helper->getLastAuthenticationError(),
+                    'last_username' => $lastUsername,
+                    'error' => $error,
         ));
     }
-
-    /**
-     * This is the route the login form submits to.
-     *
-     * But, this will never be executed. Symfony will intercept this first
-     * and handle the login automatically. See form_login in app/config/security.yml
-     *
-     * @Route("/login_check", name="security_login_check")
-     */
-    public function loginCheckAction() {
-
-        throw new \Exception('This should never be reached!');
-    }
+//
+//    /**
+//     * This is the route the login form submits to.
+//     *
+//     * But, this will never be executed. Symfony will intercept this first
+//     * and handle the login automatically. See form_login in app/config/security.yml
+//     *
+//     * @Route("/login_check", name="security_login_check")
+//     */
+//    public function loginCheckAction() {
+//
+//        throw new Exception('This should never be reached!');
+//    }
 
     /**
      * This is the route the user can use to logout.
@@ -52,7 +56,7 @@ class SecurityController extends Controller {
      * @Route("/logout", name="security_logout")
      */
     public function logoutAction() {
-        throw new \Exception('This should never be reached!');
+        throw new Exception('This should never be reached!');
     }
 
     /**
@@ -61,13 +65,13 @@ class SecurityController extends Controller {
      */
     public function changePasswordAction(Request $request) {
         $changePasswordModel = new ChangePassword();
-        $form = $this->createForm(new ChangePasswordType(), $changePasswordModel);
+        $form = $this->createForm(ChangePasswordType::class, $changePasswordModel);
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($this->get('security.password_encoder')
-                    ->encodePassword($user, $form->getData()->getNewPassword()));
+                            ->encodePassword($user, $form->getData()->getNewPassword()));
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
@@ -90,14 +94,15 @@ class SecurityController extends Controller {
     public function profileAction(Request $request) {
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $profileForm = $this->createForm('AppBundle\Form\UserType', $user);
+
+        $profileForm = $this->createForm(UserType::class, $user);
         $profileForm->handleRequest($request);
 
         if ($profileForm->isSubmitted() && $profileForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
-            
+
             $this->addFlash('success', 'user.updated_successfully');
 
             return $this->redirectToRoute('user_profile');

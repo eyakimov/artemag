@@ -12,7 +12,7 @@
 
             <div style="width: 350px;float: none">
                 <div class="jumbotron">
-                    <form action="{{ path('security_login_check') }}" method="post">
+                    <form action="{{ path('security_login') }}" method="post">
                         <fieldset>
                             <legend><i class="fa fa-lock"></i> {{ 'title.login'|trans }}</legend>
                             <div class="form-group">
@@ -23,7 +23,7 @@
                                 <label for="password">{{ 'password'|trans }}</label>
                                 <input type="password" id="password" name="_password" class="form-control" />
                             </div>
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                           {# <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>#}
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-sign-in"></i> {{ 'action.signIn'|trans }}
                             </button>

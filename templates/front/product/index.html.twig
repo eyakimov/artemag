@@ -27,6 +27,11 @@
                                     {{ 'action.show'|trans }}
                                 </a>
                             </div>
+                                <div class="item-actions">
+                                <a href="{{ path('cart_add', { id: product.id }) }}" class="btn btn-sm btn-default">
+                                    {{ 'action.cart_add'|trans }}
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 {% else %}

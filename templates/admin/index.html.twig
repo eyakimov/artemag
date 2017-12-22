@@ -6,7 +6,7 @@
         <div class="nav navbar-default">
             <div class="navbar-header">
 
-                <a class="navbar-brand" href="{{ path('admin_index') }}">
+                <a class="navbar-brand" href="{{ path('front_index') }}">
                     <i class="fa fa-home"></i> {{ 'menu.homepage'|trans }}
                 </a>
 
@@ -33,14 +33,14 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown">
+                        {#<li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-globe"></i> <span class="caret"></span></a>
                             <ul class="dropdown-menu locales" role="menu">
-                                {#{% for locale in locales() %}
+                                {% for locale in locales() %}
                                     <li {% if app.request.locale == locale.code %}class="active"{% endif %}><a href="{{ path(app.request.get('_route', 'admin_index'), app.request.get('_route_params', [])|merge({ _locale: locale.code })) }}">{{ locale.name|capitalize }}</a></li>
-                                    {% endfor %}#}
+                                    {% endfor %}
                             </ul>
-                        </li>
+                        </li>#}
                     {% endif %}
                 </ul>
             </div>

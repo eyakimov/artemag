@@ -60,6 +60,11 @@ class Product {
      */
     private $categories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="product")
+     */
+    private $products;
+
     public function __construct() {
         $this->categories = new ArrayCollection();
     }
@@ -110,6 +115,14 @@ class Product {
 
     public function setAmount($amount) {
         $this->amount = $amount;
+    }
+
+    public function getProducts() {
+        return $this->products;
+    }
+
+    public function setProducts($products) {
+        $this->products = $products;
     }
 
 }
